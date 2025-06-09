@@ -1,0 +1,197 @@
+📘 Project Backend Documentation
+This document provides a detailed overview of the backend implementation, libraries used, authentication modules, and resource-specific endpoints with required fields.
+
+🔧 Backend Libraries Used
+{
+  "bcrypt": "^6.0.0",
+  "body-parser": "^2.2.0",
+  "cloudinary": "^2.6.1",
+  "cookie-parser": "^1.4.7",
+  "cors": "^2.8.5",
+  "dotenv": "^16.5.0",
+  "express": "^5.1.0",
+  "i": "^0.3.7",
+  "jsonwebtoken": "^9.0.2",
+  "mongoose": "^8.15.1",
+  "multer": "^2.0.1",
+  "nodemailer": "^7.0.3",
+  "nodemon": "^3.1.10",
+  "validator": "^13.15.15"
+}
+
+
+🔐 Authentication & User Management
+👤 User APIs:
+registerUser
+
+
+loginUser
+
+
+forgetPassword
+
+
+resetPasswordToken
+
+
+logOutUser
+
+
+getUserDetail
+
+
+UpdateUserPassword
+
+
+UpdateUserDetail
+
+
+👑 Admin-Only APIs:
+getAllUserDetail
+
+
+getSingleUserDetail
+
+
+UpdateUserRole
+
+
+DeleteUser
+
+
+🧾 Required Fields (User):
+name
+
+
+email
+
+
+password
+
+
+avatar
+
+
+role
+
+
+
+📦 Product Management
+🧩 Public Product APIs:
+getAllProduct
+
+
+GetSingleProductsDetails
+
+
+GetAllReview
+
+
+productRating
+
+
+DeleteReview
+
+
+👑 Admin-Only Product APIs:
+CreateProduct
+
+
+DeleteProducts
+
+
+🧾 Required Fields (Product):
+name
+
+
+description
+
+
+price
+
+
+images
+
+
+category
+
+
+stock
+
+
+
+📦 Order Management
+🧩 Order APIs:
+CreateOrder
+
+
+getSingleOrder
+
+
+myOrder
+
+
+👑 Admin-Only Order APIs:
+getAllOrder
+
+
+updateOrder
+
+
+deleteOrder
+
+
+🧾 Required Fields (Order):
+sippingInfo
+
+
+orderItmes
+
+
+paymentInfo
+
+
+itemsPrice
+
+
+taxPrice
+
+
+shippingPrice
+
+
+totalPrice
+
+
+orderStatus
+
+
+deliverAt
+
+
+createAt
+
+
+
+📌 Notes
+All admin routes are protected using middleware.
+
+
+Passwords are hashed using bcrypt.
+
+
+JWT used for user sessions.
+
+
+File/image uploads handled via multer and cloudinary.
+
+
+Email features (like reset password) use nodemailer.
+
+
+MongoDB Atlas (or local MongoDB) used with Mongoose ODM.
+
+
+
+✅ This documentation helps new developers or team members understand your backend API structure quickly.
+
