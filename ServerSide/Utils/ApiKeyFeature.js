@@ -6,16 +6,20 @@ class ApiFeature {
     }
 
     search() {
-        const keyword = this.query.keyword ? {
-            name: {
-                $regex: this.query.keyword,
-                $option: 'i'
+    
+        const findKeyword = this.querystr.keyword 
+            ? {
+                name: {
+                    $regex: this.querystr.keyword ,
+                    $options: "i",
+                },
             }
-        } : {}
+            : {};
 
-        this.query = this.query.find({ ...keyword })
-        return this
+        this.query = this.query.find({ ...findKeyword });
+        return this;
     }
+
 
     filter() {
         const queryCopy = { ...this.querystr };

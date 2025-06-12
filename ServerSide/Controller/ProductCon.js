@@ -19,14 +19,13 @@ const Createproduct = async (req, res) => {
 }
 
 
-const getAllProdct = async (req, res) => {
+const getAllProdct = async (req, res, next) => {
     try {
-
-        const resultPerPage = 5;
+        const resultPerPage = 8;
         const ProductCount = await ProductSchema.countDocuments()
         const apiFeature = new ApiFeature(ProductSchema.find(), req.query).search().filter().page(resultPerPage)
         const ProductGet = await apiFeature.query;
-        res.status(200).json({ success: true, message: 'Product Get Succesfully', ProductGet })
+        res.status(200).json({ success: true, message: 'Product Get Succesfully', ProductGet, ProductCount,resultPerPage})
 
     } catch (error) {
         res.status(500).json({ message: 'Get Products Error', error })
@@ -43,6 +42,8 @@ const GetSingleProdctsDetails = async (req, res) => {
         if (!getSingleProduct) {
             return res.status(500).json({ success: false, message: 'Product Not Found' })
         }
+
+        console.log('getSingleProduct', getSingleProduct);
 
         res.status(200).json({ success: true, message: 'GetSingle Product Succesfully', getSingleProduct })
     } catch (error) {
@@ -159,7 +160,7 @@ const GetAllReview = async (req, res) => {
         if (!productReview) {
             return res.status(404).json({ success: false, message: "Product Review Is not found" });
         }
-         res.status(200).json({
+        res.status(200).json({
             success: true,
             reviews: productReview.reviews,
             ratings: productReview.ratings, // ✅ include ratings
