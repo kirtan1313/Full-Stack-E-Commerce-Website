@@ -92,10 +92,12 @@ const ProductDetails = () => {
 
               <div className="text-lg font-semibold mb-4 space-y-1">
                 <p className="text-blue-600">Price: ₹{product.price}</p>
-                <p className={product.available < 1 ? "text-red-600 font-medium" : "text-green-600 font-medium"}>
-                  {product.available < 1 ? "Out of Stock" : "In Stock"}
+                <p className={product.stock < 1 ? "text-red-600 font-medium" : "text-green-600 font-medium"}>
+                  {product.stock < 1 ? "Out of Stock" : "In Stock"}
                 </p>
               </div>
+
+
 
               <p className="text-md text-gray-700 mb-4 leading-relaxed">
                 {product.description}

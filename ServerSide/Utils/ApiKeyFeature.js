@@ -6,35 +6,40 @@ class ApiFeature {
     }
 
     search() {
-    
-        const findKeyword = this.querystr.keyword 
+        const keyword = this.querystr.keyword?.trim()
             ? {
                 name: {
-                    $regex: this.querystr.keyword ,
+                    $regex: this.querystr.keyword,
                     $options: "i",
                 },
             }
             : {};
-
-        this.query = this.query.find({ ...findKeyword });
+        this.query = this.query.find({ ...keyword });
         return this;
     }
-
 
     filter() {
         const queryCopy = { ...this.querystr };
+        const removeFields = ["keyword", "page", "limit"];
+        removeFields.forEach((key) => delete queryCopy[key]);
 
-        // Remove unwanted fields
-        const removeField = ['keyword', 'page', 'limit'];
-        removeField.forEach(key => delete queryCopy[key]);
+        // ✅ Handle category
+        if (queryCopy.category) {
+            queryCopy.category = {
+                $regex: queryCopy.category,
+                $options: "i", // case-insensitive
+            };
+        }
 
-        // Price & rating filtering
         let querystr = JSON.stringify(queryCopy);
-        querystr = querystr.replace(/\b(gt|gte|lt|lte)\b/g, (key) => `$${key}`);
+        querystr = querystr.replace(/\b(gte|lte|gt|lt)\b/g, (key) => `$${key}`);
 
-        this.query = this.query.find(JSON.parse(querystr));
+        const parsedQuery = JSON.parse(querystr);
+        this.query = this.query.find(parsedQuery);
         return this;
     }
+
+
 
 
     page(resultPerPage) {

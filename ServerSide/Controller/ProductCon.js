@@ -19,18 +19,35 @@ const Createproduct = async (req, res) => {
 }
 
 
-const getAllProdct = async (req, res, next) => {
-    try {
-        const resultPerPage = 8;
-        const ProductCount = await ProductSchema.countDocuments()
-        const apiFeature = new ApiFeature(ProductSchema.find(), req.query).search().filter().page(resultPerPage)
-        const ProductGet = await apiFeature.query;
-        res.status(200).json({ success: true, message: 'Product Get Succesfully', ProductGet, ProductCount,resultPerPage})
+const getAllProdct = async (req, res) => {
+  try {
+    const resultPerPage = 8;
+    const productCount = await ProductSchema.countDocuments();
 
-    } catch (error) {
-        res.status(500).json({ message: 'Get Products Error', error })
-    }
-}
+    const apiFeature = new ApiFeature(ProductSchema.find(), req.query)
+      .search()
+      .filter()
+      .page(resultPerPage);
+
+    const products = await apiFeature.query;
+
+    res.status(200).json({
+      success: true,
+      message: 'Products fetched successfully',
+      products,
+      productCount,
+      resultPerPage,
+      filteredProductCount: products.length,
+    });
+  } catch (error) {
+    console.log("🔥 Backend Error:", error);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching products',
+      error: error.message,
+    });
+  }
+};
 
 
 // GetSingle products Details
@@ -42,8 +59,6 @@ const GetSingleProdctsDetails = async (req, res) => {
         if (!getSingleProduct) {
             return res.status(500).json({ success: false, message: 'Product Not Found' })
         }
-
-        console.log('getSingleProduct', getSingleProduct);
 
         res.status(200).json({ success: true, message: 'GetSingle Product Succesfully', getSingleProduct })
     } catch (error) {

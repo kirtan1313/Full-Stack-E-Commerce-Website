@@ -9,23 +9,34 @@ import {
   PRODUCTS_DETAILS_REQUEST
 } from '../ReducersName/ProductsReducersName';
 
-export const getAllProducts = (keyword = "",page = 1 ) => async (dispatch) => {
+export const getAllProducts = (keyword = "", currentPage = 1, category) => async (dispatch) => {
   try {
     dispatch({ type: ALL_PRODUCTS_REQUEST });
 
-    const link = `http://localhost:3005/api/v1/product?keyword=${keyword}&page=${page}`;
-    const { data } = await axios.get(link);
+    let url = `http://localhost:3005/api/v1/product?keyword=${keyword}&page=${currentPage}`;
+    if (category) {
+      url += `&category=${category}`;
+    }
+
+    const { data } = await axios.get(url);
+
     dispatch({
       type: ALL_PRODUCTS_SUCCES,
-      payload: data
+      payload: {
+        products: data.products,
+        productCount: data.productCount,
+        resultPerPage: data.resultPerPage,
+        filteredProductCount: data.filteredProductCount,
+      },
     });
   } catch (error) {
     dispatch({
       type: ALL_PRODUCTS_FAIL,
-      payload: error.response?.data?.message || "Unknown error"
+      payload: error.response?.data?.message || error.message,
     });
   }
 };
+
 
 export const getProductsDetails = (_id) => async (dispatch) => {
   try {

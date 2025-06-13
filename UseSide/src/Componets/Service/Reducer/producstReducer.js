@@ -1,40 +1,46 @@
-import { ALL_PRODUCTS_FAIL, ALL_PRODUCTS_REQUEST, ALL_PRODUCTS_SUCCES, CLEAR_ERROR } from '../ReducersName/ProductsReducersName'
+import {
+    ALL_PRODUCTS_REQUEST,
+    ALL_PRODUCTS_SUCCES,
+    ALL_PRODUCTS_FAIL,
+} from "../ReducersName/ProductsReducersName";
 
+const initialState = {
+    products: [],
+    loading: false,
+    error: null,
+    productCount: 0,
+    resultPerPage: 0,
+    filteredProductCount: 0,
+};
 
-
-const intialReduce = {
-    products: []
-}
-
-export const productReducer = (state = intialReduce, action) => {
+export const productsReducer = (state = initialState, action) => {
     switch (action.type) {
         case ALL_PRODUCTS_REQUEST:
             return {
+                ...state,
                 loading: true,
-                products: []
+                products: [],
             };
 
         case ALL_PRODUCTS_SUCCES:
             return {
+                ...state,
                 loading: false,
-                products: action.payload.ProductGet,
-                ProductCount: action.payload.ProductCount,
-                resultPerPage:action.payload.resultPerPage
+                products: action.payload.products,
+                ProductCount: action.payload.productCount,
+                resultPerPage: action.payload.resultPerPage,
+                filteredProductCount: action.payload.filteredProductCount,
+                category:action.payload.category
             };
 
         case ALL_PRODUCTS_FAIL:
             return {
+                ...state,
                 loading: false,
                 error: action.payload,
-            }
-
-        case CLEAR_ERROR:
-            return {
-                ...state,
-                error: null
-            }
+            };
 
         default:
-            return state
+            return state;
     }
-}
+};
