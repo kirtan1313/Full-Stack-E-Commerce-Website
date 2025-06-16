@@ -10,13 +10,28 @@ const registerUser = async (req, res) => {
 
         const { name, email, password } = req.body;
 
+          if (Array.isArray(password)) {
+            return res.status(400).json({ message: "Password should not be sent multiple times" });
+        }
+
+
+        console.log("BODY:", req.body);
+        console.log("FILE:", req.file);
+
+          if (!req.file) {
+            return res.status(400).json({ message: "Avatar file is missing" });
+        }
+
         const User = await UserSchema.create({
             name, email, password,
             avatar: {
-                public_id: 'Sample Avatar Id',
-                url: "Sample URL"
+                public_id: Date.now().toString(),
+                url: `/uplodFile/${req.file.filename}`  // stored file path
             }
         })
+
+        console.log('user', User);
+
 
         sendToken(User, 201, res)
 

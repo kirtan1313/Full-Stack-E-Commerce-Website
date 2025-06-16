@@ -1,49 +1,107 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { FaBars, FaSearch, FaShoppingCart, FaTimes, FaUserAlt } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  FaBars,
-  FaTimes,
-  FaUserAlt,
-  FaShoppingCart,
-  FaSearch,
-} from "react-icons/fa";
+// rest imports...
 
 const Header = () => {
-  const [menuOpen, setMenuOpen] = React.useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null); // for outside click
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { isAuthentication, user } = useSelector((state) => state.user);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
+  const toggleDropdown = () => setDropdownOpen((prev) => !prev);
   const handleSearchIconClick = () => navigate("/search");
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
+
+  // 🔐 Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <header className="fixed top-0 w-full z-50 bg-white shadow-md transition-all duration-300">
       <div className="flex items-center justify-between px-4 py-2">
+        {/* Logo */}
         <div className="h-10 flex items-center">
-          <Link to="/" className="text-xl font-bold text-red-500">
-            E-Commerce
-          </Link>
+          <Link to="/" className="text-xl font-bold text-red-500">E-Commerce</Link>
         </div>
+
+        {/* Desktop Navigation */}
         <div className="hidden lg:flex space-x-6 items-center">
           <Link to="/" className="text-gray-700 hover:text-red-500">Home</Link>
           <Link to="/products" className="text-gray-700 hover:text-red-500">Products</Link>
           <Link to="/contact" className="text-gray-700 hover:text-red-500">Contact</Link>
           <Link to="/about" className="text-gray-700 hover:text-red-500">About</Link>
         </div>
-        <div className="flex items-center space-x-4 text-xl text-gray-700">
+
+        {/* Icons & Avatar */}
+        <div className="flex items-center space-x-4 text-xl text-gray-700 relative">
           <button onClick={handleSearchIconClick} className="hover:text-red-500">
             <FaSearch />
           </button>
+
           <Link to="/cart" className="hover:text-red-500">
             <FaShoppingCart />
           </Link>
-          <Link to="/login" className="hover:text-red-500">
-            <FaUserAlt />
-          </Link>
+
+          {isAuthentication ? (
+            <div className="relative" ref={dropdownRef}>
+              <img
+                src={user?.avatar?.url ? `http://localhost:3005${user.avatar.url}` : "/defaultAvatar.png"}
+                alt="avatar"
+                className="w-9 h-9 rounded-full cursor-pointer border hover:ring hover:ring-red-300"
+                onClick={toggleDropdown}
+              />
+              {/* Animated Dropdown */}
+              <div className={`absolute right-0 mt-2 w-36 bg-white border rounded shadow-lg text-sm overflow-hidden transition-all duration-200 ${
+                dropdownOpen ? "opacity-100 scale-100 visible" : "opacity-0 scale-95 invisible"
+              }`}>
+                <Link
+                  to="/profile"
+                  onClick={() => setDropdownOpen(false)}
+                  className="block px-4 py-2 hover:bg-gray-100 text-gray-700"
+                >
+                  👤 Profile
+                </Link>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setDropdownOpen(false);
+                  }}
+                  className="w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-700"
+                >
+                  🚪 Logout
+                </button>
+              </div>
+            </div>
+          ) : (
+            <Link to="/login" className="hover:text-red-500">
+              <FaUserAlt />
+            </Link>
+          )}
+
           <button onClick={toggleMenu} className="lg:hidden ml-2 hover:text-red-500">
             {menuOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
       </div>
+
+      {/* Mobile Menu stays unchanged */}
       {menuOpen && (
         <div className="lg:hidden bg-white px-4 py-4 flex flex-col space-y-3 shadow-md">
           <Link to="/" onClick={toggleMenu} className="text-gray-700 hover:text-red-500">Home</Link>
@@ -51,7 +109,17 @@ const Header = () => {
           <Link to="/contact" onClick={toggleMenu} className="text-gray-700 hover:text-red-500">Contact</Link>
           <Link to="/about" onClick={toggleMenu} className="text-gray-700 hover:text-red-500">About</Link>
           <Link to="/cart" onClick={toggleMenu} className="text-gray-700 hover:text-red-500">Cart</Link>
-          <Link to="/login" onClick={toggleMenu} className="text-gray-700 hover:text-red-500">Login</Link>
+
+          {isAuthentication ? (
+            <>
+              <Link to="/profile" onClick={toggleMenu} className="text-gray-700 hover:text-red-500">Profile</Link>
+              <button onClick={() => { handleLogout(); toggleMenu(); }} className="text-gray-700 hover:text-red-500 text-left">
+                Logout
+              </button>
+            </>
+          ) : (
+            <Link to="/login" onClick={toggleMenu} className="text-gray-700 hover:text-red-500">Login</Link>
+          )}
         </div>
       )}
     </header>

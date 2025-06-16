@@ -9,9 +9,18 @@ const cors = require('cors')
 const ProductRoutes = require('./Routes/ProductRoutes')
 const userRoutes = require('./Routes/UserRoutes')
 const orderRoutes = require('./Routes/OrderRoutes')
+const bodyParser = require('body-parser')
+const path = require('path')
+const multer = require('./Multer/multer');
 
 
 app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads/')));
+app.use('/uploads', express.static('uploads/'));
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}))
+
 app.use(cookieParser())
 app.use(cors())
 

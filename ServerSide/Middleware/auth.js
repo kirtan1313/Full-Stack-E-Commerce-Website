@@ -3,11 +3,19 @@ const UserSchema = require('../Model/UserModel.js')
 
 exports.isAuth = async (req, res, next) => {
     try {
-        const { token } = req.cookies
+        // const { token } = req.cookies
 
-        if (!token) {
-            return res.status(401).json({ message: 'Please Login To Access This Resource' });
+        // if (!token) {
+        //     return res.status(401).json({ message: 'Please Login To Access This Resource' });
+        // }
+
+        let token;
+
+        // Get token from Authorization header: Bearer token_here
+        if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
+            token = req.headers.authorization.split(" ")[1];
         }
+
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
 

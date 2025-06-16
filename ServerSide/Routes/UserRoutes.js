@@ -1,10 +1,11 @@
 const express = require('express')
 const userRoutes = express.Router();
 const UserController = require('../Controller/UserCon.js')
-const { isAuth, authRole } = require('../Middleware/auth.js')
+const { isAuth, authRole } = require('../Middleware/auth.js');
+const upload = require('../Multer/multer.js');
 
 
-userRoutes.post('/register',UserController.registerUser)
+userRoutes.post('/register',upload.single('avatar'),UserController.registerUser)
 userRoutes.post('/login',UserController.loginUser)
 userRoutes.post('/forgetPassword',UserController.forgetPassword)
 
