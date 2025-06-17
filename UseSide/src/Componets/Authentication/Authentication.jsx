@@ -94,14 +94,6 @@ const AuthForm = () => {
         }
     }, [error, navigate, isAuthentication]);
 
-
-
-
-
-
-
-
-
     return (
 
         <div>

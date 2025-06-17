@@ -2,12 +2,12 @@ import React, { useState, useRef, useEffect } from "react";
 import { FaBars, FaSearch, FaShoppingCart, FaTimes, FaUserAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-// rest imports...
+import { logout } from "../Service/Action/userAction";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef(null); // for outside click
+  const dropdownRef = useRef(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -17,12 +17,12 @@ const Header = () => {
   const toggleDropdown = () => setDropdownOpen((prev) => !prev);
   const handleSearchIconClick = () => navigate("/search");
 
+
   const handleLogout = () => {
     dispatch(logout());
     navigate("/login");
   };
 
-  // 🔐 Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -32,6 +32,18 @@ const Header = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const dropdownItems = [
+    { label: "👤 Profile", path: "/profile",  },
+    { label: "📦 Orders", path: "/orders",  },
+  ];
+
+  if (user?.role === "admin") {
+    dropdownItems.unshift({ label: "🛠️ Dashboard", path: "/admin/dashboard" });
+  }
+
+
+
 
   return (
     <header className="fixed top-0 w-full z-50 bg-white shadow-md transition-all duration-300">
@@ -62,22 +74,23 @@ const Header = () => {
           {isAuthentication ? (
             <div className="relative" ref={dropdownRef}>
               <img
-                src={user?.avatar?.url ? `http://localhost:3005${user.avatar.url}` : "/defaultAvatar.png"}
+                src={`http://localhost:3005${user.avatar?.url}`}
                 alt="avatar"
                 className="w-9 h-9 rounded-full cursor-pointer border hover:ring hover:ring-red-300"
                 onClick={toggleDropdown}
               />
-              {/* Animated Dropdown */}
-              <div className={`absolute right-0 mt-2 w-36 bg-white border rounded shadow-lg text-sm overflow-hidden transition-all duration-200 ${
-                dropdownOpen ? "opacity-100 scale-100 visible" : "opacity-0 scale-95 invisible"
-              }`}>
-                <Link
-                  to="/profile"
-                  onClick={() => setDropdownOpen(false)}
-                  className="block px-4 py-2 hover:bg-gray-100 text-gray-700"
-                >
-                  👤 Profile
-                </Link>
+              {/* Dropdown */}
+              <div className={`absolute right-0 mt-2 w-36 bg-white border rounded shadow-lg text-sm overflow-hidden transition-all duration-200 ${dropdownOpen ? "opacity-100 scale-100 visible" : "opacity-0 scale-95 invisible"}`}>
+                {dropdownItems.map((item, index) => (
+                  <Link
+                    key={index}
+                    to={item.path}
+                    onClick={() => setDropdownOpen(false)}
+                    className="block px-4 py-2 hover:bg-gray-100 text-gray-700"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
                 <button
                   onClick={() => {
                     handleLogout();
@@ -101,7 +114,7 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Mobile Menu stays unchanged */}
+      {/* Mobile Menu */}
       {menuOpen && (
         <div className="lg:hidden bg-white px-4 py-4 flex flex-col space-y-3 shadow-md">
           <Link to="/" onClick={toggleMenu} className="text-gray-700 hover:text-red-500">Home</Link>
@@ -112,10 +125,10 @@ const Header = () => {
 
           {isAuthentication ? (
             <>
-              <Link to="/profile" onClick={toggleMenu} className="text-gray-700 hover:text-red-500">Profile</Link>
-              <button onClick={() => { handleLogout(); toggleMenu(); }} className="text-gray-700 hover:text-red-500 text-left">
-                Logout
-              </button>
+              {dropdownItems.map((item, index) => (
+                <Link key={index} to={item.path} onClick={toggleMenu} className="text-gray-700 hover:text-red-500">{item.label}</Link>
+              ))}
+              <button onClick={() => { handleLogout(); toggleMenu(); }} className="text-gray-700 hover:text-red-500 text-left">Logout</button>
             </>
           ) : (
             <Link to="/login" onClick={toggleMenu} className="text-gray-700 hover:text-red-500">Login</Link>

@@ -10,7 +10,7 @@ const registerUser = async (req, res) => {
 
         const { name, email, password } = req.body;
 
-          if (Array.isArray(password)) {
+        if (Array.isArray(password)) {
             return res.status(400).json({ message: "Password should not be sent multiple times" });
         }
 
@@ -18,7 +18,7 @@ const registerUser = async (req, res) => {
         console.log("BODY:", req.body);
         console.log("FILE:", req.file);
 
-          if (!req.file) {
+        if (!req.file) {
             return res.status(400).json({ message: "Avatar file is missing" });
         }
 
@@ -26,10 +26,9 @@ const registerUser = async (req, res) => {
             name, email, password,
             avatar: {
                 public_id: Date.now().toString(),
-                url: `/uplodFile/${req.file.filename}`  // stored file path
+                url: `/uploads/${req.file.filename}`
             }
         })
-
         console.log('user', User);
 
 
@@ -181,7 +180,7 @@ const getUserDetail = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            userDetails,
+            user: userDetails,
             message: 'Get User SuccessFully...',
         });
 
@@ -224,28 +223,44 @@ const UpdateUserPassword = async (req, res) => {
 }
 
 
-const UpdateUserDetail = async (req, res) => {
+const updateProfile = async (req, res) => {
     try {
-
-        const newUserData = {
-            name: req.body.name,
-            email: req.body.email
+        const user = await UserSchema.findById(req.user.id);
+        console.log('update',user);
+        
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
         }
 
-        const user = await UserSchema.findByIdAndUpdate(req.user.id, newUserData, {
-            new: true,
-            runValidators: true,
-            useFindAndModify: false
-        })
+        
+        const { name, email } = req.body;
+        console.log('update-req',name,email);
+
+
+        user.name = name;
+        user.email = email;
+
+        if (req.file) {
+            user.avatar = {
+                 url: `/uploads/${req.file.filename}`
+            };
+        }
+
+        console.log('uuussseeerrr',user);
+        
+        await user.save();
 
         res.status(200).json({
-            success: true, user, message: 'Get User SuccessFully...',
+            success: true,
+            profile: user
         });
 
     } catch (error) {
-        return res.status(500).json({ message: 'Get User Details Error', error: error.message });
+        console.log("🔥 Update error:", error);
+        res.status(500).json({ message: error.message || "Internal Server Error" });
     }
-}
+};
+
 
 
 // Get All User (Admin)
@@ -332,9 +347,9 @@ module.exports = {
     logOutUser,
     forgetPassword,
     resetPasswordToken,
+    updateProfile,
     getUserDetail,
     UpdateUserPassword,
-    UpdateUserDetail,
     getAllUserDetail,
     getSingleUserDetail,
     UpdateUserRole,

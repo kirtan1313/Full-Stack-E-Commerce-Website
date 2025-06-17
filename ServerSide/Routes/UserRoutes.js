@@ -19,7 +19,7 @@ userRoutes.delete('/admin/user/:id',isAuth,authRole('admin'),UserController.Dele
 
 userRoutes.put('/reset/:token',UserController.resetPasswordToken)
 userRoutes.put('/updateUserPassword',isAuth,UserController.UpdateUserPassword)
-userRoutes.put('/updateuser',isAuth,UserController.UpdateUserDetail)
+userRoutes.put('/updateuser',isAuth,upload.single("avatar"),UserController.updateProfile)
 
 
 
