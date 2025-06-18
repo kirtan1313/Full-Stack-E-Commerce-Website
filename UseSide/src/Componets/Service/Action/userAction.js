@@ -10,7 +10,15 @@ import {
     UPDATE_PROFILE_FAIL,
     UPDATE_PROFILE_REQUEST,
     UPDATE_PROFILE_SUCCES,
-    UPDATE_PROFILE_RESET
+    UPDATE_PASSWORD_FAIL,
+    UPDATE_PASSWORD_REQUEST,
+    UPDATE_PASSWORD_SUCCES,
+    FORGET_PASSWORD_FAIL,
+    FORGET_PASSWORD_REQUEST,
+    FORGET_PASSWORD_SUCCES,
+    RESET_PASSWORD_REQUEST,
+    RESET_PASSWORD_SUCCES,
+    RESET_PASSWORD_FAIL
 } from '../ReducersName/userReducerName';
 
 
@@ -105,22 +113,19 @@ export const logout = () => async (dispatch) => {
 
 export const updateProfile = (userData) => async (dispatch) => {
     try {
-        console.log('🧾 FormData content:');
-        for (let pair of userData.entries()) {
-            console.log(pair[0] + ':', pair[1]);
-        }
 
         dispatch({ type: UPDATE_PROFILE_REQUEST });
 
+        const token = localStorage.getItem("token");
+
         const config = {
             headers: {
-                "Content-Type": "multipart/form-data"
-            }
+                "Content-Type": "multipart/form-data",
+                "Authorization": `Bearer ${token}`,
+            },
         };
 
-        const { data } = await axios.put(`http://localhost:3005/api/v1/updateuser`, userData, config);
-
-        console.log('✅ Response from server:', data);
+        const { data } = await axios.put("http://localhost:3005/api/v1/updateuser", userData, config);
 
         dispatch({ type: UPDATE_PROFILE_SUCCES, payload: data.profile });
 
@@ -129,6 +134,83 @@ export const updateProfile = (userData) => async (dispatch) => {
         dispatch({
             type: UPDATE_PROFILE_FAIL,
             payload: error.response?.data?.message || error.message,
+        });
+    }
+};
+
+
+export const updatePassword = (password) => async (dispatch) => {
+    try {
+        console.log('password', password);
+
+
+        dispatch({ type: UPDATE_PASSWORD_REQUEST });
+
+        const token = localStorage.getItem("token");
+
+        const config = {
+            headers: {
+                "Content-Type": "application/json", // ✅ This is correct for JSON
+                "Authorization": `Bearer ${token}`,
+            },
+        };
+
+        const { data } = await axios.put("http://localhost:3005/api/v1/updateUserPassword", password, config);
+
+        dispatch({ type: UPDATE_PASSWORD_SUCCES, payload: data });
+
+    } catch (error) {
+        console.log("❌ Error while updating:", error);
+        dispatch({
+            type: UPDATE_PASSWORD_FAIL,
+            payload: error.response?.data?.message || error.message,
+        });
+    }
+};
+
+
+export const forgetPassword = (email) => async (dispatch) => {
+    try {
+
+        dispatch({ type: FORGET_PASSWORD_REQUEST })
+        const config = { headers: { "Content-Type": "application/json" } }
+       
+        const { data } = await axios.post(`http://localhost:3005/api/v1/forgetPassword`,email, config)
+        dispatch({ type: FORGET_PASSWORD_SUCCES, payload: data.message, })
+
+    } catch (error) {
+        dispatch({
+            type: FORGET_PASSWORD_FAIL,
+            payload: error.response?.data?.message || error.message,
+        });
+    }
+}
+
+
+export const resetPassword = (token, passwords) => async (dispatch) => {
+    try {
+        dispatch({ type: RESET_PASSWORD_REQUEST });
+
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+
+        const { data } = await axios.put(
+            `http://localhost:3005/api/v1/resetPassword/${token}`,
+            passwords,
+            config
+        );
+        console.log('dadadatatat', data);
+
+
+        dispatch({ type: RESET_PASSWORD_SUCCES, payload: data.success });
+
+    } catch (error) {
+        dispatch({
+            type: RESET_PASSWORD_FAIL,
+            payload: error.response?.data?.success || error.success,
         });
     }
 };

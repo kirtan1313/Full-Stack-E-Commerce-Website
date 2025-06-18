@@ -32,6 +32,23 @@ const ProductDetails = () => {
     return () => window.removeEventListener("resize", slideImage);
   }, [imgId]);
 
+
+
+
+  const [quantity, setQuantity] = useState(1);
+
+  const increment = () => {
+    if (product.stock <= quantity) return
+    setQuantity((prev) => prev + 1);
+  };
+
+  const decrement = () => {
+    if (quantity > 1) {
+      setQuantity((prev) => prev - 1);
+    }
+  };
+
+
   return (
     <div className="max-w-6xl mx-auto my-20 px-4">
       {loading ? (
@@ -107,18 +124,31 @@ const ProductDetails = () => {
                 <li>Shipping: Free, All over the world</li>
               </ul>
 
-              <div className="flex space-x-3 mt-6">
+              <div className="flex space-x-3 mt-6 items-center">
+                {/* Decrement Button */}
+                <button
+                  onClick={decrement}
+                  className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 text-xl font-bold"
+                >
+                  -
+                </button>
+
                 <input
-                  type="number"
-                  min="1"
-                  className="w-20 border border-gray-300 rounded p-2 text-center"
-                  defaultValue="1"
+                  type="text"
+                  readOnly
+                  value={quantity}
+                  className="w-20 border border-gray-300 rounded p-2 text-center text-lg font-medium"
                 />
+
+                <button
+                  onClick={increment}
+                  className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 text-xl font-bold"
+                >
+                  +
+                </button>
+
                 <button className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
                   Add to Cart
-                </button>
-                <button className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700">
-                  Compare
                 </button>
               </div>
             </div>

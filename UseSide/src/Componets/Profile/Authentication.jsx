@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, register } from '../Service/Action/userAction';
 import LoadingAnimation from '../Loader/Loader';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 
@@ -171,13 +171,13 @@ const AuthForm = () => {
 
                                     {isLogin && (
                                         <div className="text-right">
-                                            <button
+                                            <Link
+                                                to={'/forgetPassword'}
                                                 type="button"
-                                                onClick={() => alert('Redirect to forget password page')}
                                                 className="text-sm text-blue-500 hover:underline"
                                             >
                                                 Forgot Password?
-                                            </button>
+                                            </Link>
                                         </div>
                                     )}
 

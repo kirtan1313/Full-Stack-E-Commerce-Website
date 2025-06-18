@@ -1,6 +1,6 @@
 import React from 'react'
 import Banner from '../Banner/Banner'
-import ProductCard from '../ProductCard/ProductCard'
+import ProductCard from '../Products/ProductCard'
 
 
 

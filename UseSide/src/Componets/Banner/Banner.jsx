@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { CiDesktopMouse2 } from "react-icons/ci";
 import { FaMouse } from "react-icons/fa";
-import Title from "../Title";
+
 
 const Banner = () => {
     return (
         <div className="relative w-full h-[600px] bg-white overflow-hidden mt-[58px]">
-            <Title title="Home" />
+            
             <div
                 className="absolute top-0 left-0 w-full h-full bg-red-500"
                 style={{

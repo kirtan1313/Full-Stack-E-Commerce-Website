@@ -93,9 +93,16 @@ const logOutUser = async (req, res) => {
 
 // Forger Password
 const forgetPassword = async (req, res) => {
+
+    console.log("Incoming forget password request:", req.body);
+
     let user;
 
     try {
+        const { email, frontendURL } = req.body;
+        console.log("📥 Email:", email); 
+        console.log("🌐 Frontend URL:", frontendURL);
+
         user = await UserSchema.findOne({ email: req.body.email });
 
         if (!user) {
@@ -107,7 +114,8 @@ const forgetPassword = async (req, res) => {
 
         await user.save({ validateBeforeSave: false });
 
-        const resetPasswordURL = `${req.protocol}://${req.get("host")}/api/v1/reset/${resetToken}`;
+        const baseURL = frontendURL || req.headers.origin || process.env.FRONTEND_URL;
+        const resetPasswordURL = `${baseURL}/reset/${resetToken}`;
 
         const message = `Your password reset token is:\n\n${resetPasswordURL}\n\nIf you have not requested this, please ignore.`;
 
@@ -163,11 +171,6 @@ const resetPasswordToken = async (req, res) => {
 
         sendToken(userReset, 200, res)
 
-        res.status(200).json({
-            success: true,
-            message: 'Reset password SuccessFully..',
-        });
-
     } catch (error) {
         return res.status(500).json({ message: 'Reset Password Error', error: error.message });
     }
@@ -192,62 +195,54 @@ const getUserDetail = async (req, res) => {
 
 const UpdateUserPassword = async (req, res) => {
     try {
-        const userDetails = await UserSchema.findById(req.user.id).select('+password')
+        const user = await UserSchema.findById(req.user.id).select("+password");
 
-        if (!userDetails) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-        console.log('userDetails', userDetails);
-
-
-        if (!req.body.oldPassword) {
-            return res.status(400).json({ message: 'Old password is required' });
-        }
-        const isPasswordMatched = await userDetails.comparePassword(req.body.oldPassword);
-
-        if (req.body.newPassword !== req.body.confirmPassword) {
-            return res.status(401).json({ message: 'NewPassword & ConfirmPassword Does Not Match Please Correct Passwornd Enter' });
-        }
-
-        userDetails.password = req.body.newPassword;
-
-        console.log('userDetails.password --- ', userDetails.password);
-
-        await userDetails.save();
-
-        return sendToken(userDetails, 200, res)
-
-    } catch (error) {
-        return res.status(500).json({ message: 'Get User Details Error', error: error.message });
-    }
-}
-
-
-const updateProfile = async (req, res) => {
-    try {
-        const user = await UserSchema.findById(req.user.id);
-        console.log('update',user);
-        
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
 
-        
-        const { name, email } = req.body;
-        console.log('update-req',name,email);
+        const isMatched = await user.comparePassword(req.body.oldPassword);
+        if (!isMatched) {
+            return res.status(400).json({ message: "Old password is incorrect" });
+        }
 
+        if (req.body.newPassword !== req.body.confirmPassword) {
+            return res.status(400).json({ message: "Passwords do not match" });
+        }
+
+        user.password = req.body.newPassword;
+        await user.save();
+
+        res.status(200).json({ success: true, message: "Password updated" });
+    } catch (error) {
+        console.log("🔥 Backend Error:", error);
+        return res.status(500).json({ message: "Internal Server Error", error: error.message });
+    }
+};
+
+
+const updateProfile = async (req, res) => {
+    try {
+
+        const user = await UserSchema.findById(req.user.id);
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+
+        const { name, email } = req.body;
 
         user.name = name;
         user.email = email;
 
         if (req.file) {
             user.avatar = {
-                 url: `/uploads/${req.file.filename}`
+                public_id: req.file.filename,
+                url: `/uploads/${req.file.filename}`
             };
         }
 
-        console.log('uuussseeerrr',user);
-        
         await user.save();
 
         res.status(200).json({
@@ -256,7 +251,6 @@ const updateProfile = async (req, res) => {
         });
 
     } catch (error) {
-        console.log("🔥 Update error:", error);
         res.status(500).json({ message: error.message || "Internal Server Error" });
     }
 };

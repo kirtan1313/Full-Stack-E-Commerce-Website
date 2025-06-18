@@ -1,4 +1,12 @@
-import { UPDATE_PROFILE_FAIL, UPDATE_PROFILE_REQUEST, UPDATE_PROFILE_SUCCES, UPDATE_PROFILE_RESET } from '../ReducersName/userReducerName'
+import {
+    UPDATE_PROFILE_FAIL,
+    UPDATE_PROFILE_REQUEST,
+    UPDATE_PROFILE_SUCCES,
+    UPDATE_PROFILE_RESET,
+    UPDATE_PASSWORD_FAIL,
+    UPDATE_PASSWORD_REQUEST,
+    UPDATE_PASSWORD_SUCCES
+} from '../ReducersName/userReducerName'
 
 const initialState = {
     loading: false,
@@ -9,12 +17,14 @@ export const profileReducer = (state = initialState, action) => {
 
     switch (action.type) {
         case UPDATE_PROFILE_REQUEST:
+        case UPDATE_PASSWORD_REQUEST:
             return {
                 ...state,
                 loading: true
             }
 
         case UPDATE_PROFILE_SUCCES:
+        case UPDATE_PASSWORD_SUCCES:
             return {
                 ...state,
                 loading: false,
@@ -22,6 +32,7 @@ export const profileReducer = (state = initialState, action) => {
             }
 
         case UPDATE_PROFILE_FAIL:
+        case UPDATE_PASSWORD_FAIL:
             return {
                 ...state,
                 loading: false,

@@ -7,7 +7,9 @@ const upload = require('../Multer/multer.js');
 
 userRoutes.post('/register',upload.single('avatar'),UserController.registerUser)
 userRoutes.post('/login',UserController.loginUser)
+
 userRoutes.post('/forgetPassword',UserController.forgetPassword)
+userRoutes.put('/resetPassword/:token',UserController.resetPasswordToken)
 
 userRoutes.get('/logout',UserController.logOutUser)
 userRoutes.get('/getuser',isAuth,UserController.getUserDetail)
@@ -17,7 +19,7 @@ userRoutes.put('/admin/user/:id',isAuth,authRole('admin'),UserController.UpdateU
 
 userRoutes.delete('/admin/user/:id',isAuth,authRole('admin'),UserController.DeleteUser)
 
-userRoutes.put('/reset/:token',UserController.resetPasswordToken)
+
 userRoutes.put('/updateUserPassword',isAuth,UserController.UpdateUserPassword)
 userRoutes.put('/updateuser',isAuth,upload.single("avatar"),UserController.updateProfile)
 

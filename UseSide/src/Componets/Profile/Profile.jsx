@@ -16,9 +16,9 @@ const Profile = () => {
     return (
         <>
             {loading ? (
-                <div>
-                    <LoadingAnimation />
-                </div>
+                <div className="h-screen flex justify-center items-center bg-gray-100">
+                        <LoadingAnimation />
+                    </div>
             ) : (
                 <div className="min-h-screen flex justify-center items-center p-6 mt-20">
                     <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md transition-all duration-300">
