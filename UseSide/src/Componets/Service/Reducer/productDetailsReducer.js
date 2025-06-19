@@ -15,7 +15,6 @@ export const productDetailsReducer = (state = initialState, action) => {
                 loading: true
             };
         case PRODUCTS_DETAILS_SUCCES:
-            console.log("✅ Product in reducer:", action.payload); 
             return {
                 loading: false,
                 product: action.payload

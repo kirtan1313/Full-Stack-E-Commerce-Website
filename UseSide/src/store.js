@@ -20,10 +20,13 @@ const rootReducer = combineReducers({
 });
 
 const initialState = {
-  cart: {
-    cartItmes: localStorage.getItem('cartItmes')
-      ? JSON.parse(localStorage.getItem('cartItmes'))
-      : []
+  cartProducts: {
+    cartItems: localStorage.getItem('cart-Product-Items')
+      ? JSON.parse(localStorage.getItem('cart-Product-Items'))
+      : [],
+    shipingInfo: localStorage.getItem('shiping-info')
+      ? JSON.parse(localStorage.getItem('shiping-info'))
+      : {}
   }
 };
 

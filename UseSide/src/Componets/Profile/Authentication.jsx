@@ -56,7 +56,7 @@ const AuthForm = () => {
             email: '',
             password: '',
         })
-        console.log('Login Success Fully...');
+        alert('Login Success Fully...');
     }
 
 
@@ -68,11 +68,9 @@ const AuthForm = () => {
         myForm.append('email', formData.email);
         myForm.append('password', formData.password);
         myForm.append('avatar', formData.avatar)
-        console.log(formData.avatar);
-        console.log([...myForm.entries()]);
 
         dispatch(register(myForm))
-        console.log('Sign In Successfully...');
+        alert('Sign In Successfully...');
 
     }
 

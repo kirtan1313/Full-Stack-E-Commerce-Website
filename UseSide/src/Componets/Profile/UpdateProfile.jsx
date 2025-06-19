@@ -55,26 +55,18 @@ function UpdateProfile() {
             myForm.append('avatar', formData.avatar);
         }
 
-        // Debug check
-        for (let pair of myForm.entries()) {
-            console.log(pair[0] + ': ' + pair[1]);
-        }
-
-        console.log('myform', myForm);
-
         dispatch(updateProfile(myForm));
     };
 
     useEffect(() => {
         if (error) toast.error(error);
         if (isUpdated) {
-            toast.success("Profile Updated Successfully!");
+            alert("Profile Updated Successfully!");
             navigate("/profile");
         }
     }, [error, isUpdated, navigate]);
 
     return (
-
 
         <>
             {

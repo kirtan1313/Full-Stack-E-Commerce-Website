@@ -12,6 +12,7 @@ const Header = () => {
   const dispatch = useDispatch();
 
   const { isAuthentication, user } = useSelector((state) => state.user);
+  const { cartItems } = useSelector((state) => state.cartProducts)
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const toggleDropdown = () => setDropdownOpen((prev) => !prev);
@@ -34,8 +35,8 @@ const Header = () => {
   }, []);
 
   const dropdownItems = [
-    { label: "👤 Profile", path: "/profile",  },
-    { label: "📦 Orders", path: "/orders",  },
+    { label: "👤 Profile", path: "/profile", },
+    { label: "📦 Orders", path: "/orders", },
   ];
 
   if (user?.role === "admin") {
@@ -67,8 +68,13 @@ const Header = () => {
             <FaSearch />
           </button>
 
-          <Link to="/cart" className="hover:text-red-500">
-            <FaShoppingCart />
+          <Link to="/cart" className="relative hover:text-red-500">
+            <FaShoppingCart size={22} />
+            {cartItems.length > 0 && (
+              <div className="absolute -top-2 -right-3 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                {cartItems.length}
+              </div>
+            )}
           </Link>
 
           {isAuthentication ? (

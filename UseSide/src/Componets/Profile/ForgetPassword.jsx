@@ -16,7 +16,7 @@ const ForgetPassword = () => {
         e.preventDefault();
 
         if (!email) {
-            toast.error("Please enter your email");
+            alert("Please enter your email");
             return;
         }
 
@@ -27,8 +27,8 @@ const ForgetPassword = () => {
 
         dispatch(forgetPassword(requestData));
 
-        console.log("Forgot Password Request Sent:", email);
-        toast.success("Password reset link sent to your email (mock)");
+       alert("Forgot Password Request Sent:", email);
+        alert("Password reset link sent to your email (mock)");
     };
 
     useEffect(() => {

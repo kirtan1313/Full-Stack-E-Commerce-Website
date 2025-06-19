@@ -4,6 +4,8 @@ import { getProductsDetails } from "../Service/Action/actions";
 import LoadingAnimation from "../Loader/Loader";
 import { useParams } from "react-router-dom";
 import StarRatings from "react-star-ratings";
+import { addItemToCart } from "../Service/Action/cartAction";
+
 
 const ProductDetails = () => {
   const [imgId, setImgId] = useState(1);
@@ -47,6 +49,12 @@ const ProductDetails = () => {
       setQuantity((prev) => prev - 1);
     }
   };
+
+
+  const AddToCartHandler = () => {
+    dispatch(addItemToCart(id, quantity))
+    alert("Item Added To Cart")
+  }
 
 
   return (
@@ -147,7 +155,7 @@ const ProductDetails = () => {
                   +
                 </button>
 
-                <button className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
+                <button className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700" onClick={AddToCartHandler}>
                   Add to Cart
                 </button>
               </div>

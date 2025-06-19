@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const ProductRoutes = require('./Routes/ProductRoutes')
 const userRoutes = require('./Routes/UserRoutes')
+const PaymentRoutes = require('./Routes/PaymentRoutes')
 const orderRoutes = require('./Routes/OrderRoutes')
 const bodyParser = require('body-parser')
 const path = require('path')
@@ -19,9 +20,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/uploads', express.static('uploads'));
 
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({extended:true}))
-
 app.use(cookieParser())
 app.use(cors())
 
@@ -29,6 +27,7 @@ app.use(cors())
 app.use('/api/v1', ProductRoutes)
 app.use('/api/v1', userRoutes)
 app.use('/api/v1', orderRoutes)
+app.use('/api/v1', PaymentRoutes)
 
 
 

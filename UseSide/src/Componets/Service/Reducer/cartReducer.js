@@ -1,7 +1,11 @@
-import { ADD_TO_CART } from '../ReducersName/cartReducerName'
+import {
+    ADD_TO_CART,
+    REMOVE_CART,
+    SAVE_SHIPING_INFO
+} from '../ReducersName/cartReducerName'
 
 const initialState = {
-    cartItmes: [],
+    cartItems: [],
     loading: false,
     error: null
 };
@@ -12,26 +16,39 @@ export const cartReducer = (state = initialState, action) => {
         case ADD_TO_CART:
             const item = action.payload;
 
-            const isItemExit = state.cartItmes.find((i) =>
+            const isItemExit = state.cartItems.find((i) =>
                 i.product === item.product
             )
 
             if (isItemExit) {
                 return {
                     ...state,
-                    cartItmes: state.cartItmes.map((data) =>
+                    cartItems: state.cartItems.map((data) =>
                         data.product === isItemExit.product ? item : data
                     )
                 }
             } else {
                 return {
                     ...state,
-                    cartItmes: [...state.cartItmes, item]
+                    cartItems: [...state.cartItems, item]
                 }
             }
 
+
+        case REMOVE_CART:
+            return {
+                ...state,
+                cartItems: state.cartItems.filter((data) => data.product !== action.payload)
+            }
+
+        case SAVE_SHIPING_INFO:
+            return {
+                ...state,
+                shipingInfo: action.payload
+            }
+
         default:
-           return state
+            return state
     }
 
 }

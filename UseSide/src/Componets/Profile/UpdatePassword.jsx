@@ -25,7 +25,7 @@ function UpdatePassword() {
         e.preventDefault();
 
         if (formData.newPassword !== formData.confirmPassword) {
-            toast.error("New password and confirm password do not match!");
+            alert("New password and confirm password do not match!");
             return;
         }
 
@@ -36,7 +36,7 @@ function UpdatePassword() {
     React.useEffect(() => {
         if (error) toast.error(error);
         if (isUpdated) {
-            toast.success("Password Updated Successfully!")
+            alert("Password Updated Successfully!")
             navigate("/profile");
         };
     }, [error, isUpdated]);
