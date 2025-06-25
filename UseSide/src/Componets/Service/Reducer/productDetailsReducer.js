@@ -1,4 +1,7 @@
-import { PRODUCTS_DETAILS_REQUEST, PRODUCTS_DETAILS_SUCCES, PRODUCTS_DETAILS_FAIL, CLEAR_ERROR } from '../ReducersName/ProductsReducersName'
+import {
+    PRODUCTS_DETAILS_REQUEST, PRODUCTS_DETAILS_SUCCES, PRODUCTS_DETAILS_FAIL, CLEAR_ERROR,
+    PRODUCTS_REVIEW_FAIL, PRODUCTS_REVIEW_SUCCES, PRODUCTS_REVIEW_REQUEST
+} from '../ReducersName/ProductsReducersName'
 
 
 const initialState = {
@@ -29,6 +32,31 @@ export const productDetailsReducer = (state = initialState, action) => {
                 ...state,
                 error: null
             };
+        default:
+            return state;
+    }
+};
+
+
+export const productReview = (state = {}, action) => {
+    switch (action.type) {
+        case PRODUCTS_REVIEW_REQUEST:
+            return {
+                ...state,
+                loading: true
+            };
+        case PRODUCTS_REVIEW_SUCCES:
+            return {
+                loading: false,
+                product: action.payload
+            };
+        case PRODUCTS_REVIEW_FAIL:
+            return {
+                ...state,
+                loading: false,
+                error: action.payload
+            };
+     
         default:
             return state;
     }

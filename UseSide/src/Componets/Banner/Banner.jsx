@@ -1,32 +1,34 @@
-import React, { useEffect } from "react";
-import { CiDesktopMouse2 } from "react-icons/ci";
+import React from "react";
 import { FaMouse } from "react-icons/fa";
 
-
 const Banner = () => {
-    return (
-        <div className="relative w-full h-[600px] bg-white overflow-hidden mt-[58px]">
-            
-            <div
-                className="absolute top-0 left-0 w-full h-full bg-red-500"
-                style={{
-                    clipPath: "polygon(100% 0, 100% 58%, 0 100%, 0 0)",
-                }}
-            />
+  return (
+    <div className="relative w-full h-[600px] bg-gradient-to-br from-red-500 via-pink-500 to-yellow-400 overflow-hidden mt-[58px] text-white">
+      {/* Overlay pattern */}
+      <div className="absolute top-0 left-0 w-full h-full bg-black opacity-30 z-0" />
 
-            <div className="relative z-10 h-full flex flex-col justify-center px-6 sm:px-12 text-white">
-                <p className="mt-2 text-lg sm:text-xl uppercase text-center">Well Come To Ecommerce</p>
-                <h1 className="text-3xl sm:text-5xl font-bold text-center uppercase">Find Amazing products below</h1>
-                <div className="flex justify-center w-[100%] pt-3 ">
-                    <button className="cursor-pointer items-center mt-4 bg-white border border-transparent hover:border-white text-black hover:text-white hover:bg-red-500 font-semibold px-5 py-2 rounded shadow flex w-[100px] transition">
-                        Scroll
-                        <span className="ps-2"><FaMouse /></span>
-                    </button>
-                </div>
+      {/* Content */}
+      <div className="relative z-10 flex flex-col justify-center items-center h-full px-4 sm:px-8 text-center">
+        <p className="text-lg sm:text-xl uppercase tracking-widest mb-2 animate-fade-in-down">
+          Welcome To Our Store
+        </p>
+        <h1 className="text-4xl sm:text-6xl font-extrabold uppercase leading-tight animate-fade-in-up drop-shadow-md">
+          Discover <span className="text-yellow-300">Amazing</span> Products
+        </h1>
+        <p className="text-md sm:text-lg mt-4 max-w-xl animate-fade-in-down text-white/90">
+          Shop the best items with great deals. Fast delivery, trusted quality.
+        </p>
 
-            </div>
+        {/* Scroll Button */}
+        <div className="mt-8 animate-bounce">
+          <button className="flex items-center gap-2 px-6 py-3 bg-white text-red-600 hover:bg-red-600 hover:text-white rounded-full font-semibold shadow-lg transition-all duration-300">
+            Scroll
+            <FaMouse className="text-md" />
+          </button>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default Banner;

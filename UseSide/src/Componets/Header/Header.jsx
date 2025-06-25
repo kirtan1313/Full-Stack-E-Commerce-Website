@@ -36,7 +36,7 @@ const Header = () => {
 
   const dropdownItems = [
     { label: "👤 Profile", path: "/profile", },
-    { label: "📦 Orders", path: "/orders", },
+    { label: "📦 Orders", path: "/me/order", },
   ];
 
   if (user?.role === "admin") {

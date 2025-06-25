@@ -6,7 +6,10 @@ import {
   CLEAR_ERROR,
   PRODUCTS_DETAILS_FAIL,
   PRODUCTS_DETAILS_SUCCES,
-  PRODUCTS_DETAILS_REQUEST
+  PRODUCTS_DETAILS_REQUEST,
+  PRODUCTS_REVIEW_FAIL,
+  PRODUCTS_REVIEW_SUCCES,
+  PRODUCTS_REVIEW_REQUEST
 } from '../ReducersName/ProductsReducersName';
 
 export const getAllProducts = (keyword = "", currentPage = 1, category) => async (dispatch) => {
@@ -59,4 +62,34 @@ export const getProductsDetails = (_id) => async (dispatch) => {
 
 export const clearError = () => (dispatch) => {
   dispatch({ type: CLEAR_ERROR });
+};
+
+
+export const newReviews = (reviewData) => async (dispatch) => {
+  try {
+ 
+    dispatch({ type: PRODUCTS_REVIEW_REQUEST });
+
+    const token = localStorage.getItem("token");
+    const config = {
+
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`
+      }
+    };
+
+    const response = await axios.put(`http://localhost:3005/api/v1/product/review`, reviewData, config);
+  
+    dispatch({
+      type: PRODUCTS_REVIEW_SUCCES,
+      payload: response.data.product,
+    });
+
+  } catch (error) {
+    dispatch({
+      type: PRODUCTS_REVIEW_FAIL,
+      payload: error.response?.data?.message || "Unknown error"
+    });
+  }
 };

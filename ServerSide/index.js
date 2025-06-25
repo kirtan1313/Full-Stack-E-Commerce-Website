@@ -21,7 +21,26 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/uploads', express.static('uploads'));
 
 app.use(cookieParser())
-app.use(cors())
+
+
+const allowedOrigins = [
+    'http://localhost:5173',      
+    'http://localhost:3000',      
+    'https://yourdomain.com',      
+    'https://admin.yourdomain.com' 
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // allow requests with no origin (like curl or Postman)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS blocked for: ' + origin));
+    }
+  },
+  credentials: true
+}));
 
 
 app.use('/api/v1', ProductRoutes)

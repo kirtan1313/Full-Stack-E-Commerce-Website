@@ -47,6 +47,11 @@ export const cartReducer = (state = initialState, action) => {
                 shipingInfo: action.payload
             }
 
+        case "LOAD_CART_FROM_STORAGE":
+            return {
+                ...state,
+                cartItems: action.payload
+            };
         default:
             return state
     }

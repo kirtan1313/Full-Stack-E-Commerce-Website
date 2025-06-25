@@ -6,25 +6,35 @@ import axios from 'axios';
 import WebFont from 'webfontloader';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import { loadCartFromStorage } from "./Componets/Service/Action/cartAction.js";
 
-// Components
+// User Componets
 import Header from './Componets/Header/Header';
 import Footer from './Componets/Footer/Footer';
 import AllComponentWrap from './Componets/AllComponetWrape/AllComponetWrape';
 import ProductDetails from './Componets/Products/ProductDetails';
 import Products from './Componets/Products/Products';
 import SearchOverlayPage from './Componets/SearchResult/SearchOverlayPage';
-import AuthForm from './Componets/Profile/Authentication';
-import Profile from './Componets/Profile/Profile';
-import UpdateProfile from './Componets/Profile/UpdateProfile';
-import UpdatePassword from './Componets/Profile/UpdatePassword';
-import ForgetPassword from './Componets/Profile/ForgetPassword';
-import ResetPassword from './Componets/Profile/ResetPassword';
+import AuthForm from './Componets/Profile/Authentication.jsx';
+import Profile from './Componets/Profile/Profile.jsx';
+import UpdateProfile from './Componets/Profile/UpdateProfile.jsx';
+import UpdatePassword from './Componets/Profile/UpdatePassword.jsx';
+import ForgetPassword from './Componets/Profile/ForgetPassword.jsx';
+import ResetPassword from './Componets/Profile/ResetPassword.jsx';
 import CartProducts from './Componets/Products/CartProducts';
 import ShippingInfo from './Componets/Products/ShippingInfo';
 import ConfirmOrder from './Componets/Products/ConfirmOrder';
 import ProcessPayment from './Componets/Products/ProcessPayments';
 import { loadUser } from './Componets/Service/Action/userAction';
+import ContactPage from './Componets/ContactPage/ContactPage';
+import AboutPage from './Componets/AboutPage/AboutPage';
+import SuccessPayment from './Componets/Products/SuccessPayment ';
+import MyOrders from './Componets/Products/MyOrders.jsx'
+import OrderDetails from './Componets/Products/OrderDetails.jsx'
+
+
+// Admin Componets
+import AdminDashboard from './Componets/Admin/AdminDashboard.jsx'
 
 
 
@@ -38,7 +48,7 @@ function AppContent() {
 
   const [stripeApiKey, setStripeApiKey] = useState("");
   const dispatch = useDispatch();
-  const { isAuthentication, loading } = useSelector((state) => state.user);
+  const { isAuthentication, loading, user } = useSelector((state) => state.user);
 
   useEffect(() => {
     WebFont.load({
@@ -60,18 +70,27 @@ function AppContent() {
           Authorization: `Bearer ${token}`,
         },
       };
-      const { data } = await axios.get('http://localhost:3005/api/v1/stripeApiKey',config);
+      const { data } = await axios.get('http://localhost:3005/api/v1/stripeApiKey', config);
       setStripeApiKey(data.StripeApiKey);
     } catch (error) {
       console.error("Failed to load Stripe API key", error);
     }
   };
 
+  useEffect(() => {
+    if (user) {
+      dispatch(loadCartFromStorage());
+    }
+  }, [user?._id]);
   return (
     <>
+
       {!hideHeaderFooter && <Header />}
 
       <Routes>
+
+        {/* User Route */}
+
         <Route path="/" element={<AllComponentWrap />} />
         <Route path="/productDetails/:id" element={<ProductDetails />} />
         <Route path="/products" element={<Products />} />
@@ -105,6 +124,18 @@ function AppContent() {
             )
           }
         />
+
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/success/payment" element={<SuccessPayment />} />
+        <Route path="/me/order" element={<MyOrders />} />
+        <Route path="/order/:id" element={<OrderDetails />} />
+
+
+        {/* Admin Route */}
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+
+
       </Routes>
 
       {!hideHeaderFooter && <Footer />}

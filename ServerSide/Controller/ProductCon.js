@@ -115,13 +115,15 @@ const DeleteProducts = async (req, res) => {
 
 const productRating = async (req, res) => {
     try {
-        const { rating, comments, productId } = req.body;
+        console.log("rating",req.body);
+        
+        const { rating, comment, productId } = req.body;
 
         const review = {
             name: req.body.name,
             user: req.body._id,
             rating: Number(rating),
-            comments,
+            comments:comment,
         };
 
         const product = await ProductSchema.findById(productId);
@@ -142,7 +144,7 @@ const productRating = async (req, res) => {
             product.reviews.forEach((rev) => {
                 if (rev.user && rev.user.toString() === req.user._id.toString()) {
                     rev.rating = rating;
-                    rev.comments = comments;
+                    rev.comments = comment;
                 }
             });
         } else {
@@ -159,7 +161,7 @@ const productRating = async (req, res) => {
 
         await product.save({ validateBeforeSave: false });
 
-        res.status(200).json({ success: true, message: "Product Rating Successfully" });
+        res.status(200).json({ success: true, message: "Product Rating Successfully",product });
     } catch (error) {
         res.status(500).json({ success: false, message: "Rating Products Error", error });
     }

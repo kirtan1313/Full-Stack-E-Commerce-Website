@@ -20,7 +20,9 @@ export const addItemToCart = (id, quantity) => async (dispatch, getState) => {
         }
     });
 
-    localStorage.setItem('cart-Product-Items', JSON.stringify(getState().cartProducts.cartItems));
+    const { user } = getState().user;
+    const key = user && user._id ? `cart-Product-Items-${user._id}` : 'cart-Product-Items';
+    localStorage.setItem(key, JSON.stringify(getState().cartProducts.cartItems));
 
 }
 
@@ -29,7 +31,9 @@ export const removeItemsCart = (id) => async (dispatch, getState) => {
         type: REMOVE_CART,
         payload: id
     })
-    localStorage.setItem('cart-Product-Items', JSON.stringify(getState().cartProducts.cartItems));
+    const { user } = getState().user;
+  const key = user && user._id ? `cart-Product-Items-${user._id}` : 'cart-Product-Items';
+    localStorage.setItem(key, JSON.stringify(getState().cartProducts.cartItems));
 }
 
 export const saveShipingInfo = (data) => async (dispatch) => {
@@ -39,3 +43,17 @@ export const saveShipingInfo = (data) => async (dispatch) => {
     })
     localStorage.setItem('shiping-info', JSON.stringify(data));
 }
+
+
+export const loadCartFromStorage = () => (dispatch, getState) => {
+  const { user } = getState().user;
+  const key = user && user._id ? `cart-Product-Items-${user._id}` : 'cart-Product-Items';
+  const localCart = localStorage.getItem(key)
+    ? JSON.parse(localStorage.getItem(key))
+    : [];
+
+  dispatch({
+    type: "LOAD_CART_FROM_STORAGE",
+    payload: localCart
+  });
+};

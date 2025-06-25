@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 const ConfirmOrder = () => {
     const navigate = useNavigate();
     const { shipingInfo, cartItems } = useSelector((state) => state.cartProducts);
+    console.log("confirmOrder",shipingInfo);
+    
     const { user } = useSelector((state) => state.user);
 
     const subtotal = cartItems.reduce(
@@ -23,7 +25,7 @@ const ConfirmOrder = () => {
         );
     }
 
-    const address = `${shipingInfo.address}, ${shipingInfo.city}, ${shipingInfo.state} - ${shipingInfo.pincode}`;
+    const address = `${shipingInfo.address}, ${shipingInfo.city}, ${shipingInfo.state} - ${shipingInfo.zip}`;
 
 
     const proccessPayment = () => {

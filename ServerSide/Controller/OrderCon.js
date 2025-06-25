@@ -5,12 +5,15 @@ const mongoose = require('mongoose')
 // Create A New Error
 exports.CreateOrder = async (req, res) => {
     try {
-
-        const { sippingInfo, orderItmes, paymentInfo, itemsPrice, taxPrice, shippingPrice, totalPrice } = req.body
+        
+        console.log("shiping Info",req.body);
+        
+        
+        const { shippingInfo, orderItmes, paymentInfo, itemsPrice, taxPrice, shippingPrice, totalPrice } = req.body
 
         const createOrder = await OrderSchema.create(
             {
-                sippingInfo,
+                shippingInfo,
                 orderItmes,
                 paymentInfo,
                 itemsPrice,
@@ -26,6 +29,7 @@ exports.CreateOrder = async (req, res) => {
         res.status(200).json({ success: true, message: 'Create A Order SuccessFully...', createOrder });
 
     } catch (error) {
+        console.error("Order Create Error:", error)
         res.status(500).json({ success: false, message: "Create A Order Error...", error });
     }
 }
@@ -93,7 +97,7 @@ exports.getAllOrder = async (req, res) => {
 
 exports.updateOrder = async (req, res) => {
     try {
-       
+
         const order = await OrderSchema.findById(req.params.id);
 
         if (!order) {

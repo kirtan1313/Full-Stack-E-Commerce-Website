@@ -3,13 +3,15 @@ const userModel = require('../Model/UserModel')
 
 
 const OrderSchema = new mongoose.Schema({
-    sippingInfo: {
+    shippingInfo: {
+        firstName: { type: String, required: true },
+        lastName: { type: String, required: true },
         address: { type: String, required: true },
         city: { type: String, required: true },
         state: { type: String, required: true },
         country: { type: String, required: true },
-        pinCode: { type: Number, required: true },
-        phoneNum: { type: Number, required: true }
+        zip: { type: Number, required: true },
+        phone: { type: String, required: true }
     },
 
     orderItmes: [
@@ -18,7 +20,7 @@ const OrderSchema = new mongoose.Schema({
             price: { type: Number, required: true },
             quantity: { type: Number, required: true },
             images: { type: String, required: true },
-            productId: { type: mongoose.Schema.ObjectId, ref: 'Product', required: true },
+            product: { type: mongoose.Schema.ObjectId, ref: 'Product', required: true },
         }
     ],
 
