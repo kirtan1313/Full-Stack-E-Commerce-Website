@@ -1,6 +1,6 @@
 // src/App.js
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, Navigate, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import WebFont from 'webfontloader';
@@ -9,32 +9,32 @@ import { loadStripe } from '@stripe/stripe-js';
 import { loadCartFromStorage } from "./Componets/Service/Action/cartAction.js";
 
 // User Componets
-import Header from './Componets/Header/Header';
-import Footer from './Componets/Footer/Footer';
+import Header from './Componets/User/Header/Header.jsx';
+import Footer from './Componets/User/Footer/Footer.jsx';
 import AllComponentWrap from './Componets/AllComponetWrape/AllComponetWrape';
-import ProductDetails from './Componets/Products/ProductDetails';
-import Products from './Componets/Products/Products';
-import SearchOverlayPage from './Componets/SearchResult/SearchOverlayPage';
-import AuthForm from './Componets/Profile/Authentication.jsx';
-import Profile from './Componets/Profile/Profile.jsx';
-import UpdateProfile from './Componets/Profile/UpdateProfile.jsx';
-import UpdatePassword from './Componets/Profile/UpdatePassword.jsx';
-import ForgetPassword from './Componets/Profile/ForgetPassword.jsx';
-import ResetPassword from './Componets/Profile/ResetPassword.jsx';
-import CartProducts from './Componets/Products/CartProducts';
-import ShippingInfo from './Componets/Products/ShippingInfo';
-import ConfirmOrder from './Componets/Products/ConfirmOrder';
-import ProcessPayment from './Componets/Products/ProcessPayments';
+import ProductDetails from './Componets/User/Products/ProductDetails.jsx';
+import Products from './Componets/User/Products/Products.jsx';
+import SearchOverlayPage from './Componets/User/SearchResult/SearchOverlayPage.jsx';
+import AuthForm from './Componets/User/Profile/Authentication.jsx';
+import Profile from './Componets/User/Profile/Profile.jsx';
+import UpdateProfile from './Componets/User/Profile/UpdateProfile.jsx';
+import UpdatePassword from './Componets/User/Profile/UpdatePassword.jsx';
+import ForgetPassword from './Componets/User/Profile/ForgetPassword.jsx';
+import ResetPassword from './Componets/User/Profile/ResetPassword.jsx';
+import CartProducts from './Componets/User/Products/CartProducts.jsx';
+import ShippingInfo from './Componets/User/Products/ShippingInfo.jsx';
+import ConfirmOrder from './Componets/User/Products/ConfirmOrder.jsx';
+import ProcessPayment from './Componets/User/Products/ProcessPayments.jsx';
 import { loadUser } from './Componets/Service/Action/userAction';
-import ContactPage from './Componets/ContactPage/ContactPage';
-import AboutPage from './Componets/AboutPage/AboutPage';
-import SuccessPayment from './Componets/Products/SuccessPayment ';
-import MyOrders from './Componets/Products/MyOrders.jsx'
-import OrderDetails from './Componets/Products/OrderDetails.jsx'
+import ContactPage from './Componets/User/ContactPage/ContactPage.jsx';
+import AboutPage from './Componets/User/AboutPage/AboutPage.jsx';
+import SuccessPayment from './Componets/User/Products/SuccessPayment .jsx';
+import MyOrders from './Componets/User/Products/MyOrders.jsx'
+import OrderDetails from './Componets/User/Products/OrderDetails.jsx'
 
 
 // Admin Componets
-import AdminDashboard from './Componets/Admin/AdminDashboard.jsx'
+import Dashboard from './Componets/Admin/Dashboard/Dashboard.jsx'
 
 
 
@@ -42,9 +42,28 @@ const ProtectedRoute = ({ isAuth, children }) => {
   return isAuth ? children : <Navigate to="/login" />;
 };
 
+const AdminRoute = ({ isAuth, user, children }) => {
+  if (!isAuth || user?.role !== "admin") {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+};
+
+
 function AppContent() {
   const location = useLocation();
-  const hideHeaderFooter = location.pathname === '/login' || location.pathname.includes('/reset');
+
+  const hideHeaderFooter =
+    location.pathname === '/login' ||
+    location.pathname.includes('/reset') ||
+    location.pathname.includes('/admin/dashboard') ||
+    location.pathname.includes('/change-password') ||
+    location.pathname.includes('/forgetPassword') ||
+    location.pathname.includes('/reset/:token') ||
+    location.pathname.includes('/proccess/payment') ||
+    location.pathname.includes('/success/payment') ||
+    location.pathname.includes('/dashboard')
+
 
   const [stripeApiKey, setStripeApiKey] = useState("");
   const dispatch = useDispatch();
@@ -82,6 +101,9 @@ function AppContent() {
       dispatch(loadCartFromStorage());
     }
   }, [user?._id]);
+
+
+   if (loading) return <p>Loading...</p>;
   return (
     <>
 
@@ -133,7 +155,7 @@ function AppContent() {
 
 
         {/* Admin Route */}
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route isAdmin={true} path="/admin/dashboard" element={<AdminRoute isAuth={isAuthentication} user={user}><Dashboard /></AdminRoute>} />
 
 
       </Routes>

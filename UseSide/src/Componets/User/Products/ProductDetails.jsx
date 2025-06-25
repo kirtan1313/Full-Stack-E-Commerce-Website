@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getProductsDetails, newReviews } from "../Service/Action/actions";
-import LoadingAnimation from "../Loader/Loader";
+import { getProductsDetails, newReviews } from "../../Service/Action/actions";
+import LoadingAnimation from "../../Loader/Loader";
 import { useParams } from "react-router-dom";
 import StarRatings from "react-star-ratings";
-import { addItemToCart } from "../Service/Action/cartAction";
+import { addItemToCart } from "../../Service/Action/cartAction";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import userReview from '../../assets/ecommerce images/userreview.jpg'
+import userReview from '../../../assets/ecommerce images/userreview.jpg'
 
 const ProductDetails = () => {
   const [imgId, setImgId] = useState(1);

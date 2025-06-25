@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import LoadingAnimation from "../Loader/Loader";
+import LoadingAnimation from "../../Loader/Loader";
 import { useDispatch, useSelector } from "react-redux";
-import { forgetPassword } from "../Service/Action/userAction";
+import { forgetPassword } from "../../Service/Action/userAction";
 
 const ForgetPassword = () => {
 

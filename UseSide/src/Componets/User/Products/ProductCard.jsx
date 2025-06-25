@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import StarRatings from "react-star-ratings";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllProducts } from "../Service/Action/actions";
-import LoadingAnimation from "../Loader/Loader";
+import { getAllProducts } from "../../Service/Action/actions";
+import LoadingAnimation from "../../Loader/Loader";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 

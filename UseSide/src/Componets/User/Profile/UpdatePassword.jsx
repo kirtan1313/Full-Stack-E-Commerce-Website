@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updatePassword } from '../Service/Action/userAction';
+import { updatePassword } from '../../Service/Action/userAction';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import LoadingAnimation from '../Loader/Loader';
+import LoadingAnimation from '../../Loader/Loader';
 
 function UpdatePassword() {
     const dispatch = useDispatch();

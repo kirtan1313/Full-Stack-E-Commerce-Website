@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom"; // ✅ import this
-import LoadingAnimation from "../Loader/Loader";
+import { Link, useNavigate } from "react-router-dom";
+import LoadingAnimation from "../../Loader/Loader";
 
 const Profile = () => {
     const { user, loading, isAuthentication } = useSelector((state) => state.user);

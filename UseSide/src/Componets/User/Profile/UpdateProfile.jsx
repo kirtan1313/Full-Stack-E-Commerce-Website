@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateProfile } from '../Service/Action/userAction';
+import { updateProfile } from '../../Service/Action/userAction';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import LoadingAnimation from '../Loader/Loader';
+import LoadingAnimation from '../../Loader/Loader';
 
 function UpdateProfile() {
     const dispatch = useDispatch();

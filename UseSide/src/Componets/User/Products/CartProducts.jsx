@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaPlus, FaMinus, FaTrash } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { addItemToCart, removeItemsCart } from "../Service/Action/cartAction";
+import { addItemToCart, removeItemsCart } from "../../Service/Action/cartAction";
 import { useNavigate } from "react-router-dom";
 
 const CartProducts = () => {

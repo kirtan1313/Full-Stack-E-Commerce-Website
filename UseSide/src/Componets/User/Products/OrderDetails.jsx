@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import LoadingAnimation from "../Loader/Loader";
-import { OrdersDetails } from "../Service/Action/orderAction";
+import LoadingAnimation from "../../Loader/Loader";
+import { OrdersDetails } from "../../Service/Action/orderAction";
 import { FaTruck, FaMoneyCheckAlt, FaBoxOpen, FaMapMarkerAlt } from "react-icons/fa";
 
 const OrderDetails = () => {

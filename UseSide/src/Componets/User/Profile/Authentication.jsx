@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { login, register } from '../Service/Action/userAction';
-import LoadingAnimation from '../Loader/Loader';
+import { login, register } from '../../Service/Action/userAction';
+import LoadingAnimation from '../../Loader/Loader';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { saveShipingInfo } from "../Service/Action/cartAction";
+import { saveShipingInfo } from "../../Service/Action/cartAction";
 import { useNavigate } from "react-router-dom";
 
 const ShippingInfo = () => {

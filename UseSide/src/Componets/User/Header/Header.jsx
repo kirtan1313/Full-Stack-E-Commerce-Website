@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { FaBars, FaSearch, FaShoppingCart, FaTimes, FaUserAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { logout } from "../Service/Action/userAction";
+import { logout } from "../../Service/Action/userAction";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);

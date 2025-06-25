@@ -8,7 +8,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { createOrder } from "../Service/Action/orderAction";
+import { createOrder } from "../../Service/Action/orderAction";
 
 const ProcessPayments = () => {
   const orderInfo = JSON.parse(sessionStorage.getItem("orderInfo"));
